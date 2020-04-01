@@ -68,6 +68,12 @@ function drawPaddle() {
   ctx.closePath();
 }
 
+// Draw score on canvas
+function drawScore() {
+  ctx.font = '20px Arial';
+  ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
+}
+
 // Draw bricks on canvas
 function drawBricks() {
   bricks.forEach(column => {
@@ -81,6 +87,20 @@ function drawBricks() {
   });
 }
 
+// Move paddle on canvas
+function movePaddle() {
+  paddle.x += paddle.dx;
+
+  // Wall detection
+  if (paddle.x + paddle.w > canvas.width) {
+    paddle.x = canvas.width - paddle.w;
+  }
+
+  if (paddle.x < 0) {
+    paddle.x = 0;
+  }
+}
+
 // Draw everything
 function draw() {
   drawBall();
@@ -89,13 +109,32 @@ function draw() {
   drawBricks();
 }
 
-// Draw score on canvas
-function drawScore() {
-  ctx.font = '20px Arial';
-  ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
+// Update canvas drawing and animation
+function update() {
+  movePaddle();
+  moveBall();
+
+  // Draw everything
+  draw();
+
+  requestAnimationFrame(update);
 }
 
-draw();
+update();
+
+// keydown event
+function keyDown(e) {
+  console.log(e.key);
+}
+
+// Keyup event
+function keyUp(e) {
+  console.log(2);
+}
+
+// keyboard event handlers
+document.addEventListener('keydown', keyDown);
+document.addEventListener('keyup', keyUp);
 
 // Rules and close event handlers
 rulesBtn.addEventListener('click', () => rules.classList.add('show'));
